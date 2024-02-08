@@ -1,37 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:project_1/app/routing/app_router.dart';
-import 'package:project_1/app/routing/routes.dart';
+import 'package:project_1/app/screens/auth/auth_view_model.dart';
 import 'package:project_1/app/services/local_storage/local_storage.dart';
-import 'package:project_1/domain/local_storage/ilocal_storage.dart';
+import 'package:project_1/app/services/user_service.dart';
 
-// тут питання з не final змінною initialRoute
-// як краще всього її ініціалізувати відповідно до роботи з local_storage
 class MyApp extends StatelessWidget {
+  final AppRouter _router;
+  late String initialRoute;
 
-  final AppRouter router = AppRouter();
-  final ILocalStorage storage = LocalStorage();
+  MyApp({super.key, required AppRouter router}) : _router = router {
+    _initializeApp();
+  }
 
-  String initialRoute = routeLogin;
-
-  MyApp({super.key});
-
-  Future<void> _checkUserExists() async {
-    try {
-      String login = await storage.read('login');
-      String password = await storage.read('password');
-      if (login.isNotEmpty && password.isNotEmpty) {
-        initialRoute = routeHome;
-      }
-    } catch (err) {
-      initialRoute = routeLogin;
-    }
+  Future<void> _initializeApp() async {
+    AuthViewModel authViewModel = AuthViewModel(localStorage: LocalStorage(), userService: UserService());
+    await authViewModel.checkUserExists();
+    initialRoute = authViewModel.initialRoute;
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      onGenerateRoute: router.onGenerateRoute,
+      onGenerateRoute: _router.onGenerateRoute,
       title: 'Project 1',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
@@ -40,6 +31,5 @@ class MyApp extends StatelessWidget {
       initialRoute: initialRoute,
     );
   }
-
-  
 }
+

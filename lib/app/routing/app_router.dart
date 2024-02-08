@@ -7,11 +7,13 @@ class AppRouter {
   Route? onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
       case routeLogin:
-        return MaterialPageRoute(builder: (_) => _buildLoginSettings(routeSettings));
+        return MaterialPageRoute(
+            builder: (_) => _buildLoginSettings(routeSettings));
       case routeHome:
-        return MaterialPageRoute(builder: (_) => _buildHomeSettings(routeSettings));
+        return MaterialPageRoute(
+            builder: (_) => _buildHomeSettings(routeSettings));
       default:
-        return null;
+        return MaterialPageRoute(builder: (_) => const Placeholder());
     }
   }
 

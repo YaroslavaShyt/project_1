@@ -1,12 +1,12 @@
-import 'package:project_1/domain/login/iauth.dart';
+import 'package:project_1/domain/login/iuser.dart';
 
-class Auth implements IAuth {
+class User implements IUser {
   @override
   String login;
 
   @override
   String password;
 
-  Auth({required this.login, required this.password});
+  User({required this.login, required this.password});
 
 }

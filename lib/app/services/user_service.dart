@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:project_1/domain/login/iauth.dart';
+import 'package:project_1/domain/login/iuser.dart';
 
 class UserService extends ChangeNotifier {
-  IAuth? _user;
+  IUser? _user;
 
-  IAuth? get user => _user;
+  IUser? get user => _user;
 
-  void setUser(IAuth? user) {
+  void setUser(IUser user) {
     _user = user;
     notifyListeners();
   }
