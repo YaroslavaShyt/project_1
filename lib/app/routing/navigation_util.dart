@@ -2,25 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:project_1/domain/navigation/inavigation_util.dart';
 
 class NavigationUtil implements INavigationUtil {
-  GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  @override
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
   @override
-  // TODO: implement canPop
-  bool get canPop => throw UnimplementedError();
-
-  @override
-  void navigateBack({data}) {
-    // TODO: implement navigateBack
-  }
-
-  @override
-  void navigateBackToStart() {
-    // TODO: implement navigateBackToStart
+  void navigateBack({dynamic data}) {
+    navigatorKey.currentState!.pop(data);
   }
 
   @override
   void navigateBackUntilNamed(String named) {
-    // TODO: implement navigateBackUntilNamed
+    navigatorKey.currentState!.popUntil(ModalRoute.withName(named));
+  }
+
+  @override
+  bool get canPop {
+    return navigatorKey.currentState!.canPop();
+  }
+
+  @override
+  void navigateBackToStart() {
+    while (navigatorKey.currentState!.canPop()) {
+      navigatorKey.currentState!.pop();
+    }
   }
 
   @override
@@ -29,24 +33,28 @@ class NavigationUtil implements INavigationUtil {
     bool allowBackNavigation = true,
     dynamic data,
   }) {
-    throw UnimplementedError();
-  }
-
-
-
-  @override
-  Future navigateToAndMakeRoot<T extends Object?>(String routeName, {data}) {
-    // TODO: implement navigateToAndMakeRoot
-    throw UnimplementedError();
+    return navigatorKey.currentState!.pushNamed(routeName, arguments: data);
   }
 
   @override
-  Future navigateToAndReplace<T extends Object?>(String routeName, {data}) {
-    // TODO: implement navigateToAndReplace
-    throw UnimplementedError();
+  Future<dynamic> navigateToAndMakeRoot<T extends Object?>(
+    String routeName, {
+    bool allowBackNavigation = true,
+    dynamic data,
+  }) {
+    return navigatorKey.currentState!.pushNamedAndRemoveUntil(
+      routeName,
+      (route) => allowBackNavigation ? false : true,
+      arguments: data,
+    );
   }
 
   @override
-  // TODO: implement navigatorKey
-  GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
+  Future<dynamic> navigateToAndReplace<T extends Object?>(
+    String routeName, {
+    dynamic data,
+  }) {
+    return navigatorKey.currentState!
+        .pushReplacementNamed(routeName, arguments: data);
+  }
 }

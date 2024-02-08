@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Button extends StatelessWidget {
-  final Function onLoginButtonPressed;
+  final onLoginButtonPressed;
   final String title;
   const Button(
       {super.key, required this.onLoginButtonPressed, required this.title});
@@ -12,7 +12,7 @@ class Button extends StatelessWidget {
       height: 60,
       width: MediaQuery.of(context).size.width - 100,
       child: ElevatedButton(
-        onPressed: () => onLoginButtonPressed(context),
+        onPressed: onLoginButtonPressed,
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.blue,
         ),

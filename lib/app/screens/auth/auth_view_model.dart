@@ -4,10 +4,12 @@ import 'package:project_1/app/routing/routes.dart';
 import 'package:project_1/app/services/user_service.dart';
 import 'package:project_1/data/login/auth.dart';
 import 'package:project_1/domain/local_storage/ilocal_storage.dart';
+import 'package:project_1/domain/navigation/inavigation_util.dart';
 
 class AuthViewModel extends BaseChangeNotifier {
   final ILocalStorage _storage;
   final UserService _userService;
+  final INavigationUtil _navigationUtil;
 
   String _login = '';
   String _password = '';
@@ -17,9 +19,12 @@ class AuthViewModel extends BaseChangeNotifier {
   String? _passwordError;
 
   AuthViewModel(
-      {required ILocalStorage localStorage, required UserService userService})
+      {required ILocalStorage localStorage,
+      required UserService userService,
+      required INavigationUtil navigationUtil})
       : _storage = localStorage,
-        _userService = userService {
+        _userService = userService,
+        _navigationUtil = navigationUtil {
     checkUserExists();
   }
 
@@ -43,7 +48,6 @@ class AuthViewModel extends BaseChangeNotifier {
   void onPasswordChanged(value) => password = value;
 
   void onLoginChanged(value) => login = value;
-
 
   bool isValidate() {
     if (_login.isEmpty) {
@@ -79,7 +83,7 @@ class AuthViewModel extends BaseChangeNotifier {
     }
   }
 
-  void onLoginButtonPressed(BuildContext context) {
+  void onLoginButtonPressed() {
     final bool isValid = isValidate();
 
     if (isValid) {
@@ -87,17 +91,16 @@ class AuthViewModel extends BaseChangeNotifier {
       _storage.save('login', login);
       _storage.save('password', password);
 
-      Future.delayed(const Duration(seconds: 2)).then(
-          (value) => Navigator.of(context).pushReplacementNamed(routeHome)
-          );
+      Future.delayed(const Duration(seconds: 2))
+          .then((value) => _navigationUtil.navigateToAndReplace(routeHome));
     }
   }
 
-   void onLogOutButtonPressed(BuildContext context) {
+  void onLogOutButtonPressed() {
     _storage.delete('login');
     _storage.delete('password');
 
-    Future.delayed(const Duration(seconds: 2)).then(
-        (value) => Navigator.of(context).pushReplacementNamed(routeLogin));
+    Future.delayed(const Duration(seconds: 2))
+        .then((value) => _navigationUtil.navigateBack());
   }
 }
