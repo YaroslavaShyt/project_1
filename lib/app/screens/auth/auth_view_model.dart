@@ -1,7 +1,7 @@
 import 'package:project_1/app/common/base_change_notifier.dart';
 import 'package:project_1/app/routing/routes.dart';
 import 'package:project_1/app/services/user_service.dart';
-import 'package:project_1/data/login/auth.dart';
+import 'package:project_1/data/login/user.dart';
 import 'package:project_1/domain/local_storage/ilocal_storage.dart';
 import 'package:project_1/domain/navigation/inavigation_util.dart';
 
@@ -93,13 +93,5 @@ class AuthViewModel extends BaseChangeNotifier {
       Future.delayed(const Duration(seconds: 2))
           .then((value) => _navigationUtil.navigateToAndReplace(routeHome));
     }
-  }
-
-  void onLogOutButtonPressed() {
-    _storage.delete('login');
-    _storage.delete('password');
-
-    Future.delayed(const Duration(seconds: 2))
-        .then((value) => _navigationUtil.navigateBack());
   }
 }

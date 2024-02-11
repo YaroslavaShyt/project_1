@@ -24,7 +24,7 @@ void main() {
                 localStorage: storage,
                 userService: service,
                 navigationUtil: navigationUtil)),
-        ChangeNotifierProvider(create: (context) => UserService()),
+        ChangeNotifierProvider(create: (context) => service),
       ],
       child: MyApp(
         navigationUtil: navigationUtil,
