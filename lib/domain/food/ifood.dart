@@ -1,6 +1,8 @@
 abstract interface class IFood {
   String title;
-  String country;
+  String area;
+  String picture;
 
-  IFood({required this.title, required this.country});
+
+  IFood({required this.title, required this.area, required this.picture});
 }
