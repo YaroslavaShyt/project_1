@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project_1/app/common/widgets/button.dart';
 import 'package:project_1/app/screens/auth/auth_view_model.dart';
 import 'package:project_1/app/screens/auth/widgets/form_text_field.dart';
-import 'package:project_1/app/services/user_service.dart';
+import 'package:project_1/app/services/user/user_service.dart';
 import 'package:project_1/domain/local_storage/ilocal_storage.dart';
 
 class AuthScreen extends StatelessWidget {

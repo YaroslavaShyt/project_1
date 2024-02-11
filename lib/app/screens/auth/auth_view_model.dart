@@ -1,6 +1,6 @@
 import 'package:project_1/app/common/base_change_notifier.dart';
 import 'package:project_1/app/routing/routes.dart';
-import 'package:project_1/app/services/user_service.dart';
+import 'package:project_1/app/services/user/user_service.dart';
 import 'package:project_1/data/login/user.dart';
 import 'package:project_1/domain/local_storage/ilocal_storage.dart';
 import 'package:project_1/domain/navigation/inavigation_util.dart';
@@ -73,7 +73,7 @@ class AuthViewModel extends BaseChangeNotifier {
       String login = await _storage.read('login');
       String password = await _storage.read('password');
       if (login.isNotEmpty && password.isNotEmpty) {
-        initialRoute = routeHome;
+        initialRoute = routeFood;
         notifyListeners();
       }
     } catch (err) {
@@ -91,7 +91,7 @@ class AuthViewModel extends BaseChangeNotifier {
       _storage.save('password', password);
 
       Future.delayed(const Duration(seconds: 2))
-          .then((value) => _navigationUtil.navigateToAndReplace(routeHome));
+          .then((value) => _navigationUtil.navigateToAndReplace(routeFood));
     }
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:project_1/app/routing/routes.dart';
-import 'package:project_1/app/screens/home/home_factory.dart';
+import 'package:project_1/app/screens/food/food_factory.dart';
 import 'package:project_1/app/screens/auth/auth_factory.dart';
 
 class AppRouter {
@@ -9,9 +9,12 @@ class AppRouter {
       case routeLogin:
         return MaterialPageRoute(
             builder: (_) => _buildLoginSettings(routeSettings));
-      case routeHome:
+      case routeFood:
         return MaterialPageRoute(
-            builder: (_) => _buildHomeSettings(routeSettings));
+            builder: (_) => _buildFoodSettings(routeSettings));
+      case routeDetails:
+        return MaterialPageRoute(
+            builder: (_) => _buildFoodDetailsSettings(routeSettings));
       default:
         return MaterialPageRoute(builder: (_) => const Placeholder());
     }
@@ -21,7 +24,11 @@ class AppRouter {
     return AuthFactory.build();
   }
 
-  Widget _buildHomeSettings(RouteSettings settings) {
-    return HomeFactory.build();
+  Widget _buildFoodSettings(RouteSettings settings) {
+    return FoodFactory.build();
+  }
+
+  Widget _buildFoodDetailsSettings(RouteSettings settings) {
+    return FoodDetailsFactory.build(settings);
   }
 }

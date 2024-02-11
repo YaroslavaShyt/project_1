@@ -23,9 +23,9 @@ class FoodRepository implements IFoodRepository {
   }
 
   @override
-  Future<IFood?> getFoodDetailes() async {
+  Future<IFood?> getFoodDetailes({required String foodID}) async {
     try {
-      var response = await _networkService.get(endpoint: urlSearch);
+      var response = await _networkService.get(endpoint: urlSearch+foodID);
       IFood food = _parseResponse(response).first;
       return food;
     } catch (err) {
