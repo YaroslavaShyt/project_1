@@ -1,5 +1,6 @@
 import 'package:project_1/app/common/base_change_notifier.dart';
 import 'package:project_1/app/routing/routes.dart';
+import 'package:project_1/app/services/local_storage/keys.dart';
 import 'package:project_1/app/services/user/user_service.dart';
 import 'package:project_1/data/login/user.dart';
 import 'package:project_1/domain/local_storage/ilocal_storage.dart';
@@ -70,8 +71,8 @@ class AuthViewModel extends BaseChangeNotifier {
 
   Future<void> checkUserExists() async {
     try {
-      String login = await _storage.read('login');
-      String password = await _storage.read('password');
+      String login = await _storage.read(keyLogin);
+      String password = await _storage.read(keyPassword);
       if (login.isNotEmpty && password.isNotEmpty) {
         initialRoute = routeFood;
         notifyListeners();
@@ -87,8 +88,8 @@ class AuthViewModel extends BaseChangeNotifier {
 
     if (isValid) {
       _userService.setUser(User(login: login, password: password));
-      _storage.save('login', login);
-      _storage.save('password', password);
+      _storage.save(keyLogin, login);
+      _storage.save(keyPassword, password);
 
       Future.delayed(const Duration(seconds: 2))
           .then((value) => _navigationUtil.navigateToAndReplace(routeFood));

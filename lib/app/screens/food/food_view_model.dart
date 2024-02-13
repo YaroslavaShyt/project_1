@@ -1,5 +1,6 @@
 import 'package:project_1/app/common/base_change_notifier.dart';
 import 'package:project_1/app/routing/routes.dart';
+import 'package:project_1/app/services/local_storage/keys.dart';
 import 'package:project_1/app/services/user/user_service.dart';
 import 'package:project_1/domain/food/ifood.dart';
 import 'package:project_1/domain/food/ifood_repository.dart';
@@ -55,8 +56,8 @@ class FoodViewModel extends BaseChangeNotifier {
   }
 
   void onLogOutButtonPressed() {
-    _storage.delete('login');
-    _storage.delete('password');
+    _storage.delete(keyLogin);
+    _storage.delete(keyPassword);
 
     _navigationUtil.navigateToAndReplace(routeLogin);
   }

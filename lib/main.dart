@@ -9,21 +9,21 @@ import 'package:project_1/domain/local_storage/ilocal_storage.dart';
 import 'package:project_1/domain/navigation/inavigation_util.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final INavigationUtil navigationUtil = NavigationUtil();
   final ILocalStorage storage = LocalStorage();
   final UserService service = UserService();
+  final AuthViewModel authViewModel = AuthViewModel(
+      localStorage: storage,
+      userService: service,
+      navigationUtil: navigationUtil);
 
   runApp(MultiProvider(
       providers: [
         Provider.value(value: navigationUtil),
-        ChangeNotifierProvider(
-            create: (context) => AuthViewModel(
-                localStorage: storage,
-                userService: service,
-                navigationUtil: navigationUtil)),
+        ChangeNotifierProvider(create: (context) => authViewModel),
         ChangeNotifierProvider(create: (context) => service),
       ],
       child: MyApp(

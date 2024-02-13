@@ -14,12 +14,6 @@ class NetworkService implements INetworkService {
     dio = Dio(BaseOptions(
       baseUrl: urlBase,
     ));
-    dio.interceptors.add(InterceptorsWrapper(
-      onError: (error, handler) {
-        print('Network error: $error');
-        handler.next(error);
-      },
-    ));
   }
 
   @override
