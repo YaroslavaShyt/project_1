@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:project_1/app/routing/routes.dart';
 import 'package:project_1/app/screens/food/food_factory.dart';
 import 'package:project_1/app/screens/auth/auth_factory.dart';
+import 'package:project_1/app/screens/food_details/food_details_factory.dart';
+import 'package:project_1/domain/food/ifood.dart';
 
 class AppRouter {
   Route? onGenerateRoute(RouteSettings routeSettings) {
@@ -29,6 +31,7 @@ class AppRouter {
   }
 
   Widget _buildFoodDetailsSettings(RouteSettings settings) {
-    return FoodDetailsFactory.build(settings);
+    IFood food = settings.arguments as IFood;
+    return FoodDetailsFactory.build(food: food);
   }
 }

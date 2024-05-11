@@ -2,11 +2,8 @@ import 'package:project_1/domain/login/iuser.dart';
 
 class User implements IUser {
   @override
-  String login;
+  String email;
 
-  @override
-  String password;
-
-  User({required this.login, required this.password});
+  User({required this.email});
 
 }

@@ -14,11 +14,10 @@ class AuthFactory {
           userService: context.read<UserService>(),
           navigationUtil: context.read<INavigationUtil>()),
       child: Consumer<AuthViewModel>(
-          builder: (context, model, child) => AuthScreen(
-                authViewModel: model,
-                storage: LocalStorage(),
-                userService: context.read<UserService>(),
-              )),
+        builder: (context, model, child) => AuthScreen(
+          viewModel: model,
+        ),
+      ),
     );
   }
 }

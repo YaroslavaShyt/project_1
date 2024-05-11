@@ -5,6 +5,7 @@ class FormTextField extends StatelessWidget {
   final ValueChanged<String> onChanged;
   final bool obscureText;
   final String? errorText;
+  
   const FormTextField({
     super.key,
     required this.label,
@@ -20,11 +21,12 @@ class FormTextField extends StatelessWidget {
       decoration: InputDecoration(
         labelText: label,
         errorText: errorText,
-        labelStyle: const TextStyle(color: Colors.blue),
+        labelStyle: const TextStyle(color: Colors.green),
         filled: true,
         fillColor: Colors.white,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30.0),
+          borderRadius: BorderRadius.circular(15.0),
+          borderSide: const BorderSide(color: Colors.white),
         ),
       ),
       obscureText: obscureText,

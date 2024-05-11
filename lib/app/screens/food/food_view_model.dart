@@ -1,6 +1,7 @@
 import 'package:project_1/app/common/base_change_notifier.dart';
 import 'package:project_1/app/routing/routes.dart';
 import 'package:project_1/app/services/local_storage/keys.dart';
+import 'package:project_1/app/services/theming/theme_provider.dart';
 import 'package:project_1/app/services/user/user_service.dart';
 import 'package:project_1/domain/food/ifood.dart';
 import 'package:project_1/domain/food/ifood_repository.dart';
@@ -11,6 +12,7 @@ class FoodViewModel extends BaseChangeNotifier {
   final ILocalStorage _storage;
   final IFoodRepository _foodRepository;
   final INavigationUtil _navigationUtil;
+  final ThemeProvider _themeProvider;
 
   List<IFood> _foodList = [];
 
@@ -18,14 +20,17 @@ class FoodViewModel extends BaseChangeNotifier {
       {required IFoodRepository foodRepository,
       required ILocalStorage localStorage,
       required UserService userService,
+      required ThemeProvider themeProvider,
       required INavigationUtil navigationUtil})
       : _foodRepository = foodRepository,
         _storage = localStorage,
+        _themeProvider = themeProvider,
         _navigationUtil = navigationUtil;
 
   List<IFood> get foodList => _foodList;
 
   Future<void> fetchFoodDataList() async {
+    foodList.clear();
     setIsDataLoading(true);
     try {
       _foodList = await _foodRepository.getAllFood();
@@ -37,7 +42,9 @@ class FoodViewModel extends BaseChangeNotifier {
     }
   }
 
-  void navigateToFoodDetails({required IFood food}){
+  Function() get swapTheme => _themeProvider.swapTheme;
+
+  void navigateToFoodDetails({required IFood food}) {
     _navigationUtil.navigateTo(routeDetails, data: food);
   }
 
@@ -56,7 +63,7 @@ class FoodViewModel extends BaseChangeNotifier {
   }
 
   void onLogOutButtonPressed() {
-    _storage.delete(keyLogin);
+    _storage.delete(keyEmail);
     _storage.delete(keyPassword);
 
     _navigationUtil.navigateToAndReplace(routeLogin);

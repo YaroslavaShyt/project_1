@@ -11,11 +11,11 @@ class AuthViewModel extends BaseChangeNotifier {
   final UserService _userService;
   final INavigationUtil _navigationUtil;
 
-  String _login = '';
+  String _email = '';
   String _password = '';
   String initialRoute = routeLogin;
 
-  String? _loginError;
+  String? _emailError;
   String? _passwordError;
 
   AuthViewModel(
@@ -28,9 +28,9 @@ class AuthViewModel extends BaseChangeNotifier {
     checkUserExists();
   }
 
-  set login(String value) {
-    _login = value.trim();
-    _loginError = null;
+  set email(String value) {
+    _email = value.trim();
+    _emailError = null;
   }
 
   set password(String value) {
@@ -38,22 +38,22 @@ class AuthViewModel extends BaseChangeNotifier {
     _passwordError = null;
   }
 
-  bool get isValid => _loginError == null && _passwordError == null;
+  bool get isValid => _emailError == null && _passwordError == null;
 
-  String? get loginError => _loginError;
+  String? get emailError => _emailError;
   String? get passwordError => _passwordError;
-  String get login => _login;
+  String get email => _email;
   String get password => _password;
 
   void onPasswordChanged(value) => password = value;
 
-  void onLoginChanged(value) => login = value;
+  void onEmailChanged(value) => email = value;
 
-  bool isValidate() {
-    if (_login.isEmpty) {
-      _loginError = 'Login is required!';
-    } else if (_login.length < 5) {
-      _loginError = 'Login must be at least 5 characters!';
+  bool isValidated() {
+    if (_email.isEmpty) {
+      _emailError = 'Email is required!';
+    } else if (!_email.contains('@')) {
+      _emailError = 'Incorrect email format!';
     }
 
     if (_password.isEmpty) {
@@ -62,7 +62,7 @@ class AuthViewModel extends BaseChangeNotifier {
       _passwordError = 'Password must be at least 5 characters!';
     }
 
-    if (_loginError != null || _passwordError != null) {
+    if (_emailError != null || _passwordError != null) {
       notifyListeners();
       return false;
     }
@@ -71,9 +71,9 @@ class AuthViewModel extends BaseChangeNotifier {
 
   Future<void> checkUserExists() async {
     try {
-      String login = await _storage.read(keyLogin);
+      String email = await _storage.read(keyEmail);
       String password = await _storage.read(keyPassword);
-      if (login.isNotEmpty && password.isNotEmpty) {
+      if (email.isNotEmpty && password.isNotEmpty) {
         initialRoute = routeFood;
         notifyListeners();
       }
@@ -84,15 +84,13 @@ class AuthViewModel extends BaseChangeNotifier {
   }
 
   void onLoginButtonPressed() {
-    final bool isValid = isValidate();
+    final bool isValid = isValidated();
 
     if (isValid) {
-      _userService.setUser(User(login: login, password: password));
-      _storage.save(keyLogin, login);
+      _userService.setUser(User(email: email));
+      _storage.save(keyEmail, email);
       _storage.save(keyPassword, password);
-
-      Future.delayed(const Duration(seconds: 2))
-          .then((value) => _navigationUtil.navigateToAndReplace(routeFood));
+     _navigationUtil.navigateToAndReplace(routeFood);
     }
   }
 }

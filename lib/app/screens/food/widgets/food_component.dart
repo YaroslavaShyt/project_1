@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:project_1/domain/food/ifood.dart';
 
 class FoodComponent extends StatelessWidget {
@@ -11,44 +12,70 @@ class FoodComponent extends StatelessWidget {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
+            color: Theme.of(context).canvasColor.withOpacity(0.5),
             spreadRadius: 5,
-            blurRadius: 7,
             offset: const Offset(0, 3),
           ),
         ],
         borderRadius: const BorderRadius.all(Radius.circular(30.0)),
-        color: Colors.white,
       ),
       margin: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
       child: Row(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
-            child: SizedBox(
-              height: 100,
-              width: 100,
-              child: Image.network(model.picture),
-            ),
-          ),
-          const SizedBox(
-            width: 20.0,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                model.title,
-                style: const TextStyle(
-                    fontSize: 20.0, fontWeight: FontWeight.w600),
-              ),
-              Text(
-                model.area,
-                style: const TextStyle(fontSize: 15.0),
-              )
-            ],
-          ),
+          Container(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
+              child: Row(
+                children: [
+                  Hero(
+                    tag: model.title,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(20.0),
+                      child: SizedBox(
+                        height: 100,
+                        width: 100,
+                        child: Image.network(model.picture),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    width: 20.0,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        model.title,
+                        style: const TextStyle(
+                            fontSize: 20.0, fontWeight: FontWeight.w600),
+                      ),
+                      Text(
+                        model.area,
+                        style: const TextStyle(fontSize: 15.0),
+                      )
+                    ],
+                  ),
+                ],
+              )),
+          Expanded(
+              child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
+            RotatedBox(
+                quarterTurns: 1,
+                child: Container(
+                    width: 120,
+                    height: 50,
+                    margin: const EdgeInsets.all(5.0),
+                    decoration: BoxDecoration(
+                        color: Colors.amber,
+                        borderRadius: BorderRadius.circular(25.0)),
+                    child: Center(
+                        child: Text(
+                      model.category,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).primaryColorLight),
+                    ))))
+          ]))
         ],
       ),
     );

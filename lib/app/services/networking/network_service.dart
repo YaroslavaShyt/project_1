@@ -19,7 +19,7 @@ class NetworkService implements INetworkService {
   @override
   Future delete({required String endpoint}) async {
     try {
-      final response = await dio.delete(endpoint, options: buildOptions());
+      final response = await dio.delete(endpoint, options: _buildOptions());
       return response.data;
     } catch (error) {
       return error.toString();
@@ -29,7 +29,7 @@ class NetworkService implements INetworkService {
   @override
   Future get({required String endpoint}) async {
     try {
-      final response = await dio.get(endpoint, options: buildOptions());
+      final response = await dio.get(endpoint, options: _buildOptions());
       return response.data;
     } catch (error) {
       return error.toString();
@@ -40,7 +40,7 @@ class NetworkService implements INetworkService {
   Future post({required String endpoint, required dynamic data}) async {
     try {
       final response =
-          await dio.post(endpoint, data: data, options: buildOptions());
+          await dio.post(endpoint, data: data, options: _buildOptions());
       return response.data;
     } catch (error) {
       return error.toString();
@@ -51,7 +51,7 @@ class NetworkService implements INetworkService {
   Future put({required String endpoint, required dynamic data}) async {
     try {
       final response =
-          await dio.put(endpoint, data: data, options: buildOptions());
+          await dio.put(endpoint, data: data, options: _buildOptions());
       return response.data;
     } catch (error) {
       return error.toString();
@@ -62,14 +62,14 @@ class NetworkService implements INetworkService {
   Future update({required String endpoint, required dynamic data}) async {
     try {
       final response =
-          await dio.patch(endpoint, data: data, options: buildOptions());
+          await dio.patch(endpoint, data: data, options: _buildOptions());
       return response.data;
     } catch (error) {
       return error.toString();
     }
   }
 
-  Options buildOptions() {
+  Options _buildOptions() {
     return Options(
       headers: {
         'Content-Type': 'application/json',
