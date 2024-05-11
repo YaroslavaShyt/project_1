@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:project_1/app/screens/food/screens/food_screen.dart';
 import 'package:project_1/app/screens/food/food_view_model.dart';
-import 'package:project_1/app/screens/food/screens/food_screen_details.dart';
+import 'package:project_1/app/screens/food_details/food_screen_details.dart';
 import 'package:project_1/app/services/local_storage/local_storage.dart';
 import 'package:project_1/app/services/networking/network_service.dart';
 import 'package:project_1/app/services/user/user_service.dart';
