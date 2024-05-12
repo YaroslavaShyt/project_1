@@ -1,9 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:project_1/app/common/widgets/cached_network_image.dart';
 import 'package:project_1/app/screens/food_details/food_details_view_model.dart';
+import 'package:project_1/app/screens/food_details/widgets/category_header.dart';
+import 'package:project_1/app/screens/food_details/widgets/cuisine_label.dart';
 import 'package:project_1/app/screens/food_details/widgets/indicators.dart';
+import 'package:project_1/app/screens/food_details/widgets/ingredient_card.dart';
 import 'package:project_1/app/screens/food_details/widgets/youtube_videoplayer.dart';
-import 'package:project_1/app/services/networking/endpoints.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart' as mobile;
+import 'package:youtube_player_iframe/youtube_player_iframe.dart' as web;
 
 class FoodDetailsScreen extends StatefulWidget {
   final FoodDetailsViewModel viewModel;
@@ -16,25 +21,33 @@ class FoodDetailsScreen extends StatefulWidget {
 class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
   late List<Widget> mediaContent;
   int _currentIndex = 0;
-  late YoutubePlayerController _controller;
+  late var _controller;
+  bool isLoaded = false;
 
   @override
   void initState() {
     super.initState();
-    _controller =
-        YoutubePlayerController(initialVideoId: widget.viewModel.videoId ?? '');
+    if (kIsWeb) {
+      _controller = web.YoutubePlayerController();
+    } else {
+      _controller = mobile.YoutubePlayerController(
+          initialVideoId: widget.viewModel.videoId ?? '');
+    }
     mediaContent = [
       Hero(
         tag: widget.viewModel.food.title,
         child: ClipRRect(
             borderRadius: BorderRadius.circular(30.0),
-            child: Image.network(widget.viewModel.food.picture)),
+            child: MainCachedNetworkImage(
+              url: widget.viewModel.food.picture,
+            )),
       ),
       if (widget.viewModel.videoId != null)
         ClipRRect(
             borderRadius: BorderRadius.circular(30.0),
             child: YoutubeVideoPlayer(
               controller: _controller,
+              videoId: widget.viewModel.videoId,
             ))
     ];
   }
@@ -47,9 +60,19 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
 
   @override
   void dispose() {
-    _controller.pause();
-    _controller.dispose();
+    if (kIsWeb) {
+      _controller.close();
+    } else {
+      _controller.dispose();
+    }
+
     super.dispose();
+  }
+
+  void _onIndicatorsTap() {
+    setState(() {
+      _currentIndex == 0 ? _currentIndex = 1 : _currentIndex = 0;
+    });
   }
 
   @override
@@ -57,19 +80,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.viewModel.food.title),
-        actions: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10.0),
-            child: Container(
-                margin: const EdgeInsets.only(right: 10.0),
-                padding: const EdgeInsets.all(10.0),
-                color: Theme.of(context).canvasColor,
-                child: Text(
-                  widget.viewModel.food.area,
-                  style: TextStyle(color: Theme.of(context).primaryColorLight),
-                )),
-          ),
-        ],
+        actions: [CuisineLabel(label: widget.viewModel.food.area)],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -83,24 +94,10 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
               height: 10.0,
             ),
             Indicators(
-              onTap: () {
-                setState(() {
-                  if (_currentIndex == 0) {
-                    _currentIndex = 1;
-                  } else {
-                    _currentIndex = 0;
-                  }
-                });
-              },
+              onTap: _onIndicatorsTap,
               current: _currentIndex,
             ),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Ingredients",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-              ),
-            ),
+            const CategoryHeader(title: "Ingredients"),
             const SizedBox(
               height: 10.0,
             ),
@@ -110,45 +107,14 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                   scrollDirection: Axis.horizontal,
                   itemCount: widget.viewModel.food.ingredients.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      margin: const EdgeInsets.only(right: 10.0),
-                      padding: const EdgeInsets.all(8.0),
-                      width: 100,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                          color: Theme.of(context).canvasColor),
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Image.network(
-                                "$urlIngredients${widget.viewModel.food.ingredients[index]}-Small.png"),
-                            Wrap(children: [
-                              Text(
-                                overflow: TextOverflow.ellipsis,
-                                maxLines: 2,
-                                widget.viewModel.food.ingredients[index],
-                                style: TextStyle(
-                                    color: Theme.of(context).primaryColorLight,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 13.5),
-                              ),
-                            ])
-                          ],
-                        ),
-                      ),
-                    );
+                    return IngredientCard(
+                        name: widget.viewModel.food.ingredients[index]);
                   }),
             ),
             const SizedBox(
               height: 10.0,
             ),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Instructions",
-                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
-              ),
-            ),
+            const CategoryHeader(title: "Instructions"),
             const SizedBox(
               height: 10.0,
             ),

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:project_1/app/screens/food/food_view_model.dart';
 import 'package:project_1/app/screens/food/widgets/food_component.dart';
@@ -67,16 +68,30 @@ class _FoodScreenState extends State<FoodScreen> {
             ))
           : !widget._viewModel.isDataLoaded
               ? const Center(child: Text('Error loading data'))
-              : ListView.builder(
-                  itemCount: widget._viewModel.foodList.length,
-                  itemBuilder: (context, index) {
-                    IFood food = widget._viewModel.foodList[index];
-                    return GestureDetector(
-                        onTap: () =>
-                            widget._viewModel.navigateToFoodDetails(food: food),
-                        child: FoodComponent(model: food));
-                  },
-                ),
+              : kIsWeb
+                  ? GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4),
+                      itemCount: widget._viewModel.foodList.length,
+                      itemBuilder: (context, index) {
+                        IFood food = widget._viewModel.foodList[index];
+                        return GestureDetector(
+                            onTap: () => widget._viewModel
+                                .navigateToFoodDetails(food: food),
+                            child: FoodComponent(model: food));
+                      },
+                    )
+                  : ListView.builder(
+                      itemCount: widget._viewModel.foodList.length,
+                      itemBuilder: (context, index) {
+                        IFood food = widget._viewModel.foodList[index];
+                        return GestureDetector(
+                            onTap: () => widget._viewModel
+                                .navigateToFoodDetails(food: food),
+                            child: FoodComponent(model: food));
+                      },
+                    ),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:project_1/app/screens/auth/auth_view_model.dart';
 import 'package:project_1/app/screens/auth/widgets/form_text_field.dart';
 import 'package:project_1/app/common/widgets/main_button.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class AuthScreen extends StatelessWidget {
   final AuthViewModel viewModel;
@@ -15,8 +16,8 @@ class AuthScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Container(
-            height: MediaQuery.of(context).size.height - 300,
-            width: MediaQuery.of(context).size.width - 50,
+            height: kIsWeb ? 500 : MediaQuery.of(context).size.height - 300,
+            width: kIsWeb ? 400 : MediaQuery.of(context).size.width - 50,
             decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(

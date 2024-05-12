@@ -72,6 +72,11 @@ class NetworkService implements INetworkService {
   Options _buildOptions() {
     return Options(
       headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Allow-Headers":
+            "Origin,Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,locale",
+        "Access-Control-Allow-Methods": "POST, OPTIONS",
         'Content-Type': 'application/json',
       },
     );
